@@ -1,0 +1,8 @@
+一、项目概述
+    该项目为模拟对电商平台后台日志进行实时分析,采用主流技术Spark。
+    流程为日志系统(actual-time-data-house-mock)通过HTTP协议将日志信息发送到(actual-time-data-house-kafka),
+    actual-time-data-house-kafka项目通过日志类型将日志信息按照启动日志和事件日志发送到Kafka的不同的Topic。
+    将(actual-time-data-house-kafka)通过Nginx进行负载均衡提供给(actual-time-data-house-mock)进行发送日志；
+
+二、流程
+    后台日志(actual-time-data-house-mock) -> Nginx -> Kafka生成者(actual-time-data-house-kafka) ->
