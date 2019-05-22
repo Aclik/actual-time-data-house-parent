@@ -1,4 +1,4 @@
-package com.yxBuild.utils
+package com.yxBuild
 
 import java.text.SimpleDateFormat
 import java.util.Date

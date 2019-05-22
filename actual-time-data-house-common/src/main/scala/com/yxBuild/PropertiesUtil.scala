@@ -1,4 +1,4 @@
-package com.yxBuild.utils
+package com.yxBuild
 
 import java.io.InputStreamReader
 import java.util.Properties

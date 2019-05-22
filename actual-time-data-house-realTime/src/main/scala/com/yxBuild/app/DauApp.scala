@@ -4,10 +4,10 @@ import java.text.SimpleDateFormat
 import java.util
 import java.util.Date
 
-import com.alibaba.fastjson.{JSON, JSONObject}
+import com.alibaba.fastjson.JSON
+import com.yxBuild.{DateUtil, MyEsUtil, MyKafkaUtil, RedisUtil}
 import com.yxBuild.bean.StartUp
-import com.yxBuild.utils.{DateUtil, MyEsUtil, MyKafkaUtil, RedisUtil}
-import constant.GmallConstant
+import yxBuild.constant.GmallConstant
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.rdd.RDD
@@ -53,7 +53,7 @@ object DauApp {
     jedisClient.select(5)
 
     // 6、过滤已经今日已经登录过的设备(判断是否在Redis已经保存,如果保存不需要在RDD返回)
-    val filteredStartuplogDstream: DStream[StartUp] = startUpLogDStream.transform(rdd => {
+    val filteredStartUpLogDStream: DStream[StartUp] = startUpLogDStream.transform(rdd => {
       // 6.1、定义Key值
       val todayDate: String = new SimpleDateFormat("yyyy-MM-dd").format(new Date())
       val key: String = "dau:" + todayDate
@@ -71,7 +71,7 @@ object DauApp {
     jedisClient.close()
 
     // 7、根据Mid进行分组,定制格式
-    val groupByMidDStream: DStream[(String, Iterable[StartUp])] = filteredStartuplogDstream.map(startUpLog => (startUpLog.mid,startUpLog)).groupByKey()
+    val groupByMidDStream: DStream[(String, Iterable[StartUp])] = filteredStartUpLogDStream.map(startUpLog => (startUpLog.mid,startUpLog)).groupByKey()
 
     // 8、每组取一个
     val distinctStartUpDStream: DStream[StartUp] = groupByMidDStream.flatMap {
@@ -93,7 +93,7 @@ object DauApp {
         }
         jedis.close()
         // 9.2 将详细数据保存到ElasticSearch
-        MyEsUtil.insertBulk(GmallConstant.ES_INDEX_DAU,startUpList)
+        MyEsUtil.insertBulk(GmallConstant.ES_INDEX_DAU,GmallConstant.ES_DEFAULT_TYPE,startUpList)
       })
     })
 

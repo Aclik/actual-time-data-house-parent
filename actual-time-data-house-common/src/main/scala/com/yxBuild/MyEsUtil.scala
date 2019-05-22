@@ -1,13 +1,12 @@
-package com.yxBuild.utils
+package com.yxBuild
 
 import java.util
 import java.util.Objects
 
-import constant.GmallConstant
 import io.searchbox.client.config.HttpClientConfig
-import io.searchbox.client.{JestClient, JestClientFactory, JestResult}
+import io.searchbox.client.{JestClient, JestClientFactory}
 import io.searchbox.core.{Bulk, BulkResult, Index}
-import io.searchbox.indices.CreateIndex
+import yxBuild.constant.GmallConstant
 
 object MyEsUtil {
 
@@ -55,15 +54,16 @@ object MyEsUtil {
   }
 
   /**
-    * 批量插入
+    * 批量添加数据(如果Index和Type不存在,则自动创建)
     *
-    * @param indexName 索引名称
-    * @param list 数据
+    * @param indexName Index名称
+    * @param typeName Type名称
+    * @param list 数据集合
     */
-  def insertBulk(indexName: String, list: List[Any]): Unit = {
+  def insertBulk(indexName: String,typeName:String, list: List[Any]): Unit = {
     val jest: JestClient = getClient
     val bulkBuilder = new Bulk.Builder
-    bulkBuilder.defaultIndex(indexName).defaultType(GmallConstant.ES_DEFAULT_TYPE)
+    bulkBuilder.defaultIndex(indexName).defaultType(typeName)
     for (doc <- list) {
       val index: Index = new Index.Builder(doc).build()
       bulkBuilder.addAction(index)
