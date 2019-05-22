@@ -5,4 +5,5 @@
     将(actual-time-data-house-kafka)通过Nginx进行负载均衡提供给(actual-time-data-house-mock)进行发送日志；
 
 二、流程
-    后台日志(actual-time-data-house-mock) -> Nginx -> Kafka生成者(actual-time-data-house-kafka) ->
+    后台日志(actual-time-data-house-mock) -> Nginx -> Kafka生成者(actual-time-data-house-kafka) -> Spark Streaming(消费者)
+    -> redis缓存用户 -> ElasticSearch

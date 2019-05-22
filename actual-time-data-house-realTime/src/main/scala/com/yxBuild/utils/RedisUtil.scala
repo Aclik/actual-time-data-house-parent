@@ -1,0 +1,35 @@
+package com.yxBuild.utils
+
+import java.util.Properties
+
+import redis.clients.jedis.{Jedis, JedisPool, JedisPoolConfig}
+
+object RedisUtil {
+
+  var jedisPool:JedisPool = null
+
+  /**
+    *
+    * @return
+    */
+  def getJedisClient:Jedis ={
+    if (jedisPool == null) {
+      // 1、获取Redis基础配置
+      val properties: Properties = PropertiesUtil.load("config.properties")
+      val host: String = properties.getProperty("redis.host")
+      val portStr: String = properties.getProperty("redis.port")
+      // 2、配置Redis连接池
+      val jedisPoolConfig = new JedisPoolConfig()
+      jedisPoolConfig.setMaxTotal(100)  //最大连接数
+      jedisPoolConfig.setMaxIdle(20)   //最大空闲
+      jedisPoolConfig.setMinIdle(20)     //最小空闲
+      jedisPoolConfig.setBlockWhenExhausted(true)  //忙碌时是否等待
+      jedisPoolConfig.setMaxWaitMillis(500)//忙碌时等待时长 毫秒
+      jedisPoolConfig.setTestOnBorrow(true) //每次获得连接的进行测试
+      // 3、获取Redis连接池对象
+      jedisPool = new JedisPool(jedisPoolConfig,host,portStr.toInt)
+    }
+    // 4、将Redis客户端是咧对象返回
+    jedisPool.getResource
+  }
+}

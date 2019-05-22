@@ -14,6 +14,7 @@
         <module>actual-time-data-house-common</module>
         <module>actual-time-data-house-kafka</module>
         <module>actual-time-data-house-mock</module>
+        <module>actual-time-data-house-realTime</module>
     </modules>
 
     <parent>

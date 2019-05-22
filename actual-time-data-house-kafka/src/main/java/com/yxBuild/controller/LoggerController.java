@@ -3,7 +3,7 @@ package com.yxBuild.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.yxBuild.constant.GmallConstant;
+import constant.GmallConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class LoggerController {
-
 
     @Autowired
     KafkaTemplate<String,String> kafkaTemplate;
